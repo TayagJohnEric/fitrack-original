@@ -11,62 +11,70 @@ use App\Models\WeightHistory;
 use App\Models\UserNutritionGoal;
 use App\Models\UserWorkoutSchedule;
 use App\Models\WorkoutTemplate;
+use App\Models\FoodSuggestionTemplate;
+use App\Models\FoodItem;
+use App\Models\TemplateFoodItem;
+use App\Models\UserFavoriteSuggestion;
 use Illuminate\Support\Facades\Log;
 
 class OnboardingController extends Controller
 {
-    /**
-     * Process user onboarding after registration
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function processOnboarding()
-    {
-        $user = Auth::user();
-        $profile = $user->profile;
-        
-        // Check if user has a complete profile
-        if (!$profile || !$profile->first_name || !$profile->height_cm || !$profile->current_weight_kg) {
-            // Determine which step of profile setup they need to go to
-            if (!$profile || !$profile->first_name) {
-                return redirect()->route('profile.setup.basics')
-                    ->with('info', 'Please complete your profile to continue with onboarding.');
-            } elseif (!$profile->height_cm || !$profile->current_weight_kg) {
-                return redirect()->route('profile.setup.physical')
-                    ->with('info', 'Please complete your physical information to continue with onboarding.');
-            } else {
-                return redirect()->route('profile.setup.preferences')
-                    ->with('info', 'Please complete your preferences to continue with onboarding.');
-            }
+   /**
+ * Process user onboarding after registration
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function processOnboarding()
+{
+    $user = Auth::user();
+    $profile = $user->profile;
+    
+    // Check if user has a complete profile
+    if (!$profile || !$profile->first_name || !$profile->height_cm || !$profile->current_weight_kg) {
+        // Determine which step of profile setup they need to go to
+        if (!$profile || !$profile->first_name) {
+            return redirect()->route('profile.setup.basics')
+                ->with('info', 'Please complete your profile to continue with onboarding.');
+        } elseif (!$profile->height_cm || !$profile->current_weight_kg) {
+            return redirect()->route('profile.setup.physical')
+                ->with('info', 'Please complete your physical information to continue with onboarding.');
+        } else {
+            return redirect()->route('profile.setup.preferences')
+                ->with('info', 'Please complete your preferences to continue with onboarding.');
         }
-        
-        // Check if user already completed onboarding
-        if ($user->hasCompletedOnboarding()) {
-            return redirect()->route('dashboard')
-                ->with('info', 'You have already completed the onboarding process.');
-        }
-        
-        // 1. Calculate BMI using the user's height and weight
-        $bmiRecord = $this->calculateAndStoreBmi($user, $profile);
-        
-        // 2. Log initial weight in weight history
-        $weightRecord = $this->logInitialWeight($user, $profile);
-        
-        // 3. Generate personalized nutrition goals
-        $nutritionGoals = $this->generateNutritionGoals($user, $profile);
-        
-        // 4. Assign workout templates based on user preferences
-        $workoutSchedules = $this->assignWorkoutSchedules($user, $profile);
-        
-        // 5. Show confirmation summary
-        return view('profile.onboarding_summary', compact(
-            'profile', 
-            'bmiRecord', 
-            'weightRecord', 
-            'nutritionGoals', 
-            'workoutSchedules'
-        ));
     }
+    
+    // Check if user already completed onboarding
+    if ($user->hasCompletedOnboarding()) {
+        return redirect()->route('dashboard')
+            ->with('info', 'You have already completed the onboarding process.');
+    }
+    
+    // 1. Calculate BMI using the user's height and weight
+    $bmiRecord = $this->calculateAndStoreBmi($user, $profile);
+    
+    // 2. Log initial weight in weight history
+    $weightRecord = $this->logInitialWeight($user, $profile);
+    
+    // 3. Generate personalized nutrition goals
+    $nutritionGoals = $this->generateNutritionGoals($user, $profile);
+    
+    // 4. Assign workout templates based on user preferences
+    $workoutSchedules = $this->assignWorkoutSchedules($user, $profile);
+    
+    // 5. Generate food suggestions based on user profile and preferences
+    $foodSuggestions = $this->generateFoodSuggestions($user, $profile);
+    
+    // 6. Show confirmation summary
+    return view('profile.onboarding_summary', compact(
+        'profile', 
+        'bmiRecord', 
+        'weightRecord', 
+        'nutritionGoals', 
+        'workoutSchedules',
+        'foodSuggestions'
+    ));
+}
     
     /**
      * Calculate and store BMI record
@@ -250,4 +258,103 @@ class OnboardingController extends Controller
         
         return $templates;
     }
+
+    /**
+ * Generate personalized food suggestions based on user profile
+ *
+ * @param \App\Models\User $user
+ * @param \App\Models\UserProfile $profile
+ * @return array
+ */
+private function generateFoodSuggestions($user, $profile)
+{
+    // Check if user has fitness goal and experience level
+    if (!$profile->fitness_goal_id || !$profile->experience_level_id) {
+        Log::warning('Cannot generate food suggestions - missing fitness goal or experience level for user #' . $user->id);
+        return [];
+    }
+    
+    // Get templates matching user's fitness goal via the category relationship
+    $suggestionQuery = FoodSuggestionTemplate::whereHas('category', function($query) use ($profile) {
+        $query->where('fitness_goal_id', $profile->fitness_goal_id)
+              ->orWhereNull('fitness_goal_id'); // Also include general templates with no specific goal
+    });
+    
+    // Filter by experience level - include templates at or below user's level
+    $suggestionQuery->where('min_experience_level_id', '<=', $profile->experience_level_id);
+    
+    // Get all potential templates
+    $potentialTemplates = $suggestionQuery->get();
+    
+    // If user has allergies, filter out templates with allergens
+    if ($user->allergies->count() > 0) {
+        $userAllergies = $user->allergies->pluck('name')->toArray();
+        
+        // Filter templates that don't contain allergens
+        $filteredTemplates = $potentialTemplates->filter(function($template) use ($userAllergies) {
+            // Get all food items in this template
+            $templateFoodIds = $template->foodItems->pluck('food_id')->toArray();
+            
+            // Check if any food item contains allergens
+            $allergenFoods = FoodItem::whereIn('id', $templateFoodIds)
+                ->where(function($query) use ($userAllergies) {
+                    foreach ($userAllergies as $allergy) {
+                        $query->orWhere(function($q) use ($allergy) {
+                            $q->whereRaw('LOWER(allergy_info) LIKE ?', ['%' . strtolower($allergy) . '%']);
+                        });
+                    }
+                })->count();
+            
+            // Keep templates with no allergens
+            return $allergenFoods === 0;
+        });
+        
+        $potentialTemplates = $filteredTemplates;
+    }
+    
+    // Group templates by meal type to select one per meal type
+    $mealTypeGroups = $potentialTemplates->groupBy('target_meal_type');
+    
+    $suggestions = [];
+    
+    // Meal types to include - using the enum values from migration
+    $mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+    
+    foreach ($mealTypes as $mealType) {
+        if (isset($mealTypeGroups[$mealType]) && $mealTypeGroups[$mealType]->count() > 0) {
+            // Select one template per meal type (random)
+            $selectedTemplate = $mealTypeGroups[$mealType]->random();
+            
+            // Get detailed food items
+            $foodItems = $selectedTemplate->foodItems()->with('food')->get();
+            
+            // Calculate nutritional breakdown
+            $calories = 0;
+            $protein = 0;
+            $carbs = 0;
+            $fat = 0;
+            
+            foreach ($foodItems as $item) {
+                $servingSize = $item->suggested_quantity;
+                $calories += $item->food->calories_per_serving * $servingSize;
+                $protein += $item->food->protein_grams_per_serving * $servingSize;
+                $carbs += $item->food->carb_grams_per_serving * $servingSize;
+                $fat += $item->food->fat_grams_per_serving * $servingSize;
+            }
+            
+            $suggestions[] = [
+                'template' => $selectedTemplate,
+                'food_items' => $foodItems,
+                'nutrition' => [
+                    'calories' => round($calories),
+                    'protein' => round($protein),
+                    'carbs' => round($carbs),
+                    'fat' => round($fat)
+                ]
+            ];
+        }
+    }
+    
+    return $suggestions;
+}
 }

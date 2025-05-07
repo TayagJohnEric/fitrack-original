@@ -239,6 +239,107 @@
         </div>
     </div>
 
+    <!-- Food Suggestions -->
+<div class="bg-white rounded-lg border border-gray-200 shadow-sm mt-6">
+    <div class="bg-blue-600 text-white px-4 py-3 rounded-t-lg">
+        <h3 class="font-semibold text-lg flex items-center">
+            <i class="fas fa-utensils mr-2"></i>
+            Your Food Suggestions
+        </h3>
+    </div>
+    <div class="p-5">
+        @if(count($foodSuggestions) > 0)
+            <p class="text-gray-700 mb-4">Based on your profile, we've prepared these meal suggestions to help you reach your fitness goals.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach($foodSuggestions as $suggestion)
+                    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <!-- Header -->
+                        <div class="bg-emerald-50 px-4 py-3 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-medium text-gray-800">{{ $suggestion['template']->name }}</h4>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {{ $suggestion['template']->target_meal_type }}
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">{{ $suggestion['template']->description }}</p>
+                        </div>
+                        
+                        <!-- Food Items -->
+                        <div class="px-4 py-3">
+                            <h5 class="text-sm font-medium text-gray-500 mb-2">Ingredients:</h5>
+                            <ul class="space-y-2">
+                                @foreach($suggestion['food_items'] as $item)
+                                    <li class="flex justify-between items-center">
+                                        <span class="text-gray-800">
+                                            {{ $item->food->name }}
+                                            @if($item->is_required)
+                                                <span class="text-xs text-blue-600">*</span>
+                                            @endif
+                                        </span>
+                                        <span class="text-gray-600 text-sm">{{ $item->suggested_quantity }} serving(s)</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        
+                        <!-- Nutrition -->
+                        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                            <h5 class="text-sm font-medium text-gray-500 mb-2">Estimated Nutrition:</h5>
+                            <div class="grid grid-cols-4 gap-2 text-center">
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-800">{{ $suggestion['nutrition']['calories'] }}</p>
+                                    <p class="text-xs text-gray-500">Calories</p>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-semibold text-pink-600">{{ $suggestion['nutrition']['protein'] }}g</p>
+                                    <p class="text-xs text-gray-500">Protein</p>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-semibold text-blue-600">{{ $suggestion['nutrition']['carbs'] }}g</p>
+                                    <p class="text-xs text-gray-500">Carbs</p>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-semibold text-yellow-600">{{ $suggestion['nutrition']['fat'] }}g</p>
+                                    <p class="text-xs text-gray-500">Fat</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="px-4 py-3 border-t border-gray-200 flex space-x-2">
+                            <form action="#" method="POST" class="flex-1">
+                                @csrf
+                                <input type="hidden" name="template_id" value="{{ $suggestion['template']->id }}">
+                                <button type="submit" class="w-full px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium rounded-lg text-sm flex items-center justify-center transition duration-200">
+                                    <i class="fas fa-heart mr-2"></i>
+                                    Save to Favorites
+                                </button>
+                            </form>
+                            <form action="#" method="POST" class="flex-1">
+                                @csrf
+                                <input type="hidden" name="template_id" value="{{ $suggestion['template']->id }}">
+                                <button type="submit" class="w-full px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 font-medium rounded-lg text-sm flex items-center justify-center transition duration-200">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Add to Today
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="flex items-center justify-center py-10 text-gray-500 text-center">
+                <div>
+                    <i class="fas fa-utensils text-2xl mb-3"></i>
+                    <p>No food suggestions could be generated with your current profile.</p>
+                    <p class="text-sm mt-1">Visit your dashboard to set up custom meal plans!</p>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
+
     @if($nutritionGoals)
     <script>
         document.addEventListener('DOMContentLoaded', function() {

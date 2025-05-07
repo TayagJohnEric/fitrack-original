@@ -23,7 +23,7 @@ class FoodSuggestionTemplate extends Model
 
     public function foodItems()
     {
-        return $this->hasMany(TemplateFoodItem::class);
+        return $this->hasMany(TemplateFoodItem::class, 'template_id');
     }
 
     public function userFavorites()
