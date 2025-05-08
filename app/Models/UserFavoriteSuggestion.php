@@ -11,6 +11,11 @@ class UserFavoriteSuggestion extends Model
 
     protected $fillable = ['user_id', 'template_id', 'saved_at', 'custom_name', 'last_used'];
 
+    protected $casts = [
+        'saved_at' => 'datetime',
+        'last_used' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('saved_at');
             $table->string('custom_name')->nullable();
             $table->timestamp('last_used')->nullable();
+            $table->timestamps(); // <-- Add this line
+
         });
     }
 

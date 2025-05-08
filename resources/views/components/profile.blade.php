@@ -6,7 +6,7 @@
     <!-- Name & Email -->
     <div class="hidden sm:block leading-tight">
         <p class="text-sm font-medium text-gray-900 m-0">{{$user->name}}</p>
-        <p class="text-sm text-gray-500 truncate m-0">{{$profile->first_name}} {{$profile->last_name}}</p>
+        <p class="text-sm text-gray-500 truncate m-0">{{$user->profile->first_name}} {{$user->profile->last_name}}</p>
     </div>
     
 

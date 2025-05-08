@@ -195,51 +195,10 @@
                             @endif
                         </div>
                     </div>
-
-                    <!-- CTA Button -->
-                    <div class="flex justify-center mt-8">
-                        <a href="{{ route('dashboard') }}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center">
-                            <span>Continue to Dashboard</span>
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
-            
-            <!-- Additional Resources -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                <a href="#" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 flex items-center">
-                    <div class="bg-indigo-100 p-3 rounded-full mr-3">
-                        <i class="fas fa-book text-indigo-600"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-medium text-gray-800">Beginner's Guide</h4>
-                        <p class="text-xs text-gray-500">Learn how to use FitTrack</p>
-                    </div>
-                </a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 flex items-center">
-                    <div class="bg-emerald-100 p-3 rounded-full mr-3">
-                        <i class="fas fa-apple-alt text-emerald-600"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-medium text-gray-800">Nutrition Tips</h4>
-                        <p class="text-xs text-gray-500">Healthy meal ideas</p>
-                    </div>
-                </a>
-                <a href="#" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 flex items-center">
-                    <div class="bg-orange-100 p-3 rounded-full mr-3">
-                        <i class="fas fa-heart-pulse text-orange-600"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-medium text-gray-800">Community</h4>
-                        <p class="text-xs text-gray-500">Connect with others</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
 
-    <!-- Food Suggestions -->
+             <!-- Food Suggestions -->
 <div class="bg-white rounded-lg border border-gray-200 shadow-sm mt-6">
     <div class="bg-blue-600 text-white px-4 py-3 rounded-t-lg">
         <h3 class="font-semibold text-lg flex items-center">
@@ -308,7 +267,7 @@
                         
                         <!-- Action Buttons -->
                         <div class="px-4 py-3 border-t border-gray-200 flex space-x-2">
-                            <form action="#" method="POST" class="flex-1">
+                            <form action="{{route('food.favorites.save')}}" method="POST" class="flex-1">
                                 @csrf
                                 <input type="hidden" name="template_id" value="{{ $suggestion['template']->id }}">
                                 <button type="submit" class="w-full px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium rounded-lg text-sm flex items-center justify-center transition duration-200">
@@ -337,9 +296,51 @@
                 </div>
             </div>
         @endif
+         <!-- CTA Button -->
+         <div class="flex justify-center mt-8">
+            <a href="{{ route('dashboard') }}" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center">
+                <span>Continue to Dashboard</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
     </div>
 </div>
 
+            
+            <!-- Additional Resources -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                <a href="#" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 flex items-center">
+                    <div class="bg-indigo-100 p-3 rounded-full mr-3">
+                        <i class="fas fa-book text-indigo-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-800">Beginner's Guide</h4>
+                        <p class="text-xs text-gray-500">Learn how to use FitTrack</p>
+                    </div>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 flex items-center">
+                    <div class="bg-emerald-100 p-3 rounded-full mr-3">
+                        <i class="fas fa-apple-alt text-emerald-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-800">Nutrition Tips</h4>
+                        <p class="text-xs text-gray-500">Healthy meal ideas</p>
+                    </div>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-200 flex items-center">
+                    <div class="bg-orange-100 p-3 rounded-full mr-3">
+                        <i class="fas fa-heart-pulse text-orange-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-800">Community</h4>
+                        <p class="text-xs text-gray-500">Connect with others</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+   
     @if($nutritionGoals)
     <script>
         document.addEventListener('DOMContentLoaded', function() {

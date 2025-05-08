@@ -10,6 +10,8 @@ use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\FoodSuggestionController;
+
 
 
 
@@ -78,26 +80,49 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware(['auth'])->group(function () {
     // Profile setup routes
     Route::prefix('profile/setup')->name('profile.setup.')->group(function () {
-        Route::get('/basics', [App\Http\Controllers\ProfileSetupController::class, 'showBasics'])->name('basics');
-        Route::post('/basics', [App\Http\Controllers\ProfileSetupController::class, 'storeBasics']);
-        Route::get('/physical', [App\Http\Controllers\ProfileSetupController::class, 'showPhysical'])->name('physical');
-        Route::post('/physical', [App\Http\Controllers\ProfileSetupController::class, 'storePhysical']);
-        Route::get('/preferences', [App\Http\Controllers\ProfileSetupController::class, 'showPreferences'])->name('preferences');
-        Route::post('/preferences', [App\Http\Controllers\ProfileSetupController::class, 'storePreferences'])->name('preferences.store');
+        Route::get('/basics', [ProfileSetupController::class, 'showBasics'])->name('basics');
+        Route::post('/basics', [ProfileSetupController::class, 'storeBasics']);
+        Route::get('/physical', [ProfileSetupController::class, 'showPhysical'])->name('physical');
+        Route::post('/physical', [ProfileSetupController::class, 'storePhysical']);
+        Route::get('/preferences', [ProfileSetupController::class, 'showPreferences'])->name('preferences');
+        Route::post('/preferences', [ProfileSetupController::class, 'storePreferences'])->name('preferences.store');
     });
     
     // Onboarding route (no onboarding middleware to prevent redirect loops)
-    Route::get('/onboarding', [App\Http\Controllers\OnboardingController::class, 'processOnboarding'])
+    Route::get('/onboarding', [OnboardingController::class, 'processOnboarding'])
         ->name('onboarding.process');
         
     // Routes that require onboarding to be completed
     Route::middleware(['onboarding'])->group(function () {
         // Dashboard route
-        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+        Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
             
         // Other authenticated routes that require completed onboarding
         // ...
     });
+});
+
+// Food Suggestion Favorites Routes
+Route::middleware(['auth'])->group(function () {
+    // View all favorites
+    Route::get('/food/favorites', [FoodSuggestionController::class, 'favorites'])
+        ->name('food.favorites');
+    
+    // Save a suggestion as favorite
+    Route::post('/food/favorites/save', [FoodSuggestionController::class, 'saveFavorite'])
+        ->name('food.favorites.save');
+    
+    // Remove a suggestion from favorites
+    Route::delete('/food/favorites/{id}/remove', [FoodSuggestionController::class, 'removeFavorite'])
+        ->name('food.favorites.remove');
+    
+    // Mark a favorite as used
+    Route::post('/food/favorites/{id}/use', [FoodSuggestionController::class, 'markAsUsed'])
+        ->name('food.favorites.use');
+    
+    // Update custom name for a favorite
+    Route::patch('/food/favorites/{id}/update-name', [FoodSuggestionController::class, 'updateCustomName'])
+        ->name('food.favorites.update-name');
 });
 
