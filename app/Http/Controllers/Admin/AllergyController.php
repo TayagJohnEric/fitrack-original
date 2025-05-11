@@ -9,13 +9,15 @@ use App\Models\ExperienceLevel;
 use App\Models\WorkoutType;
 use App\Models\Allergy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AllergyController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $allergies = Allergy::all();
-        return view('admin.preferences.allergies_index', compact('allergies'));
+        return view('admin.preferences.allergies_index', compact('allergies', 'user'));
     }
 
     public function store(Request $request)

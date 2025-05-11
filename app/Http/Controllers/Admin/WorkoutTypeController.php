@@ -9,13 +9,15 @@ use App\Models\ExperienceLevel;
 use App\Models\WorkoutType;
 use App\Models\Allergy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WorkoutTypeController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $workoutTypes = WorkoutType::all();
-        return view('admin.preferences.workout_types_index', compact('workoutTypes'));
+        return view('admin.preferences.workout_types_index', compact('workoutTypes', 'user'));
     }
 
     public function store(Request $request)

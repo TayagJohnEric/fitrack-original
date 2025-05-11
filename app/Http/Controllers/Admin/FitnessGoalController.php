@@ -8,13 +8,15 @@ use App\Models\FitnessGoal;
 use App\Models\ExperienceLevel;
 use App\Models\WorkoutType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FitnessGoalController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $fitnessGoals = FitnessGoal::all();
-        return view('admin.preferences.fitness_goals_index', compact('fitnessGoals'));
+        return view('admin.preferences.fitness_goals_index', compact('fitnessGoals', 'user'));
     }
 
     public function store(Request $request)

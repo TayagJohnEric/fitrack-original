@@ -8,13 +8,15 @@ use App\Models\FitnessGoal;
 use App\Models\ExperienceLevel;
 use App\Models\WorkoutType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityLevelController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $activityLevels = ActivityLevel::all();
-        return view('admin.preferences.activity_levels_index', compact('activityLevels'));
+        return view('admin.preferences.activity_levels_index', compact('activityLevels', 'user'));
     }
 
     public function store(Request $request)

@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\WorkoutTypeController;
 use App\Http\Controllers\Admin\AllergyController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-
+use App\Http\Controllers\Admin\PreferencesController;
 use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -32,6 +32,8 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth']);
+
+Route::get('/admin/preferences', [PreferencesController::class, 'index'])->name('admin.preferences');
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
