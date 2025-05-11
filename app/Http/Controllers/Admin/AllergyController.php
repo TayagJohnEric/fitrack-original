@@ -15,7 +15,7 @@ class AllergyController extends Controller
     public function index()
     {
         $allergies = Allergy::all();
-        return view('admin.allergies_index', compact('allergies'));
+        return view('admin.preferences.allergies_index', compact('allergies'));
     }
 
     public function store(Request $request)

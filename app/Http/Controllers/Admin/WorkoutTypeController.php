@@ -15,7 +15,7 @@ class WorkoutTypeController extends Controller
     public function index()
     {
         $workoutTypes = WorkoutType::all();
-        return view('admin.workout_types_index', compact('workoutTypes'));
+        return view('admin.preferences.workout_types_index', compact('workoutTypes'));
     }
 
     public function store(Request $request)

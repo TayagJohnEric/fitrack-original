@@ -46,34 +46,35 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+   public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        if (Auth::attempt($credentials, $request->has('remember'))) {
-            $request->session()->regenerate();
+    if (Auth::attempt($credentials, $request->has('remember'))) {
+        $request->session()->regenerate();
 
-            // If user hasn't completed their profile yet, redirect to profile setup
-            if (!Auth::user()->profile) {
-                return redirect()->route('profile.setup.basics');
-            }
-
-            return redirect()->intended(route('dashboard'));
+        // Check if the authenticated user has the role 'user'
+        if (Auth::user()->role !== 'user') {
+            Auth::logout();
+            return back()->withErrors([
+                'email' => 'Access denied. You are not authorized to log in.',
+            ])->withInput($request->except('password'));
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->withInput($request->except('password'));
+        // If user hasn't completed their profile yet, redirect to profile setup
+        if (!Auth::user()->profile) {
+            return redirect()->route('profile.setup.basics');
+        }
+
+        return redirect()->intended(route('dashboard'));
     }
 
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/login');
-    }
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ])->withInput($request->except('password'));
+}
+
 }

@@ -26,7 +26,7 @@
 <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden relative">
         <!-- Sidebar Component -->
-        @include('components.sidebar')
+        @include('components.user.sidebar')
 
         <!-- Backdrop overlay (shown when sidebar is open on mobile) -->
         <div id="sidebar-backdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40" aria-hidden="true"></div>
@@ -34,7 +34,7 @@
         <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header Component -->
-            @include('components.header')
+            @include('components.user.header')
             
             <!-- Main Content -->
             <main class="flex-1 overflow-y-auto p-4 bg-white">

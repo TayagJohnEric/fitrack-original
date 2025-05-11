@@ -1,6 +1,6 @@
-@extends('layouts.user.app')
+@extends('layouts.admin.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Admin Dashboard')
 
 @section('content')
 

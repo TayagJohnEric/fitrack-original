@@ -14,7 +14,7 @@ class ActivityLevelController extends Controller
     public function index()
     {
         $activityLevels = ActivityLevel::all();
-        return view('admin.activity_levels_index', compact('activityLevels'));
+        return view('admin.preferences.activity_levels_index', compact('activityLevels'));
     }
 
     public function store(Request $request)

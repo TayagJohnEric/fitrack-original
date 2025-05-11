@@ -14,7 +14,7 @@ class FitnessGoalController extends Controller
     public function index()
     {
         $fitnessGoals = FitnessGoal::all();
-        return view('admin.fitness_goals_index', compact('fitnessGoals'));
+        return view('admin.preferences.fitness_goals_index', compact('fitnessGoals'));
     }
 
     public function store(Request $request)

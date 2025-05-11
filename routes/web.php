@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\FitnessGoalController;
 use App\Http\Controllers\Admin\ExperienceLevelController;
 use App\Http\Controllers\Admin\WorkoutTypeController;
 use App\Http\Controllers\Admin\AllergyController;
+use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+
 use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -14,19 +17,23 @@ use App\Http\Controllers\FoodSuggestionController;
 
 
 
-
+//LandingPage
 Route::get('/', function () {
     return view('welcome');
 });
 
 
 
-Route::get('/onlyadmin', function () {
-    return view('admin.dashboard');
-});
+
+//Admin Login Form
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.view');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout')->middleware('auth');
 
 
-// Public routes for lookup tables
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth']);
+
+
 Route::prefix('admin')->name('admin.')->group(function () {
     // Activity Levels
     Route::get('/activity-levels', [ActivityLevelController::class, 'index'])->name('activity-levels.index');
@@ -73,10 +80,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
-
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-/// Add these routes to your existing routes file
+
+
+
+//Profile Setup After A User Registerring
 Route::middleware(['auth'])->group(function () {
     // Profile setup routes
     Route::prefix('profile/setup')->name('profile.setup.')->group(function () {
@@ -97,11 +106,23 @@ Route::middleware(['auth'])->group(function () {
         // Dashboard route
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
-            
-        // Other authenticated routes that require completed onboarding
-        // ...
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//User route
 
 // Food Suggestion Favorites Routes
 Route::middleware(['auth'])->group(function () {

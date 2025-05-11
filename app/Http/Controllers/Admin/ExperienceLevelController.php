@@ -14,7 +14,7 @@ class ExperienceLevelController extends Controller
     public function index()
     {
         $experienceLevels = ExperienceLevel::all();
-        return view('admin.experience_levels_index', compact('experienceLevels'));
+        return view('admin.preferences.experience_levels_index', compact('experienceLevels'));
     }
 
     public function store(Request $request)
