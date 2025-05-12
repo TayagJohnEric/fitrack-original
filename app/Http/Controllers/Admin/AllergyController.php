@@ -17,7 +17,7 @@ class AllergyController extends Controller
     {
         $user = Auth::user();
         $allergies = Allergy::all();
-        return view('admin.preferences.allergies_index', compact('allergies', 'user'));
+        return view('admin.configurations.allergies_index', compact('allergies', 'user'));
     }
 
     public function store(Request $request)

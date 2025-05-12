@@ -15,4 +15,11 @@ class AdminDashboardController extends Controller
 
         return view('admin.dashboard', compact('user'));
     }
+
+    public function foodManagement(){
+
+         $user = Auth::user();
+
+        return view('admin.foods.food_management', compact('user'));
+    }
 }

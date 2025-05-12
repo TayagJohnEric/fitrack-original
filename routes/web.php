@@ -8,7 +8,13 @@ use App\Http\Controllers\Admin\WorkoutTypeController;
 use App\Http\Controllers\Admin\AllergyController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\PreferencesController;
+use App\Http\Controllers\Admin\AdminFoodItemController;
+use App\Http\Controllers\Admin\ConfigurationController;
+use App\Http\Controllers\Admin\AdminExerciseController;
+use App\Http\Controllers\Admin\AdminWorkoutTemplateController;
+use App\Http\Controllers\Admin\AdminFoodSuggestionCategoryController;
+use App\Http\Controllers\Admin\AdminFoodSuggestionTemplateController;
+use App\Http\Controllers\Admin\AdminTemplateFoodItemController;
 use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -32,9 +38,71 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard')->middleware(['auth']);
+Route::get('/admin/food-management', [AdminDashboardController::class, 'foodManagement'])
+        ->name('admin.food-management.dashboard');
 
-Route::get('/admin/preferences', [PreferencesController::class, 'index'])->name('admin.preferences');
+//Manage Foods Items on admin side
+Route::prefix('admin/food-items')->group(function () {
+    Route::get('/', [AdminFoodItemController::class, 'index'])->name('admin.food-items.index');
+    Route::get('/{id}/edit', [AdminFoodItemController::class, 'edit'])->name('admin.food-items.edit');
+    Route::put('/{id}', [AdminFoodItemController::class, 'update'])->name('admin.food-items.update');
+    Route::delete('/{id}', [AdminFoodItemController::class, 'destroy'])->name('admin.food-items.destroy');
+});
 
+//Manage Food Suggestion Category on admin side
+Route::prefix('admin')->group(function () {
+    Route::get('/food-suggestions', [AdminFoodSuggestionCategoryController::class, 'index'])->name('admin.food-suggestions.index');
+    Route::get('/food-suggestions/create', [AdminFoodSuggestionCategoryController::class, 'create'])->name('admin.food-suggestions.create');
+    Route::post('/food-suggestions', [AdminFoodSuggestionCategoryController::class, 'store'])->name('admin.food-suggestions.store');
+    Route::get('/food-suggestions/{foodSuggestion}/edit', [AdminFoodSuggestionCategoryController::class, 'edit'])->name('admin.food-suggestions.edit');
+    Route::put('/food-suggestions/{foodSuggestion}', [AdminFoodSuggestionCategoryController::class, 'update'])->name('admin.food-suggestions.update');
+    Route::delete('/food-suggestions/{foodSuggestion}', [AdminFoodSuggestionCategoryController::class, 'destroy'])->name('admin.food-suggestions.destroy');
+});
+
+// Manage Food Suggestion Templates on amdin side
+Route::get('/admin/food-templates', [AdminFoodSuggestionTemplateController::class, 'index'])->name('admin.food-templates.index');
+Route::get('/admin/food-templates/create', [AdminFoodSuggestionTemplateController::class, 'create'])->name('admin.food-templates.create');
+Route::post('/admin/food-templates', [AdminFoodSuggestionTemplateController::class, 'store'])->name('admin.food-templates.store');
+Route::get('/admin/food-templates/{foodTemplate}/edit', [AdminFoodSuggestionTemplateController::class, 'edit'])->name('admin.food-templates.edit');
+Route::put('/admin/food-templates/{foodTemplate}', [AdminFoodSuggestionTemplateController::class, 'update'])->name('admin.food-templates.update');
+Route::delete('/admin/food-templates/{foodTemplate}', [AdminFoodSuggestionTemplateController::class, 'destroy'])->name('admin.food-templates.destroy');
+
+// Manage Template Food Items on admin side
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/template-food-items', [AdminTemplateFoodItemController::class, 'index'])
+        ->name('admin.template-food-items.index');
+    Route::get('/template-food-items/create', [AdminTemplateFoodItemController::class, 'create'])
+        ->name('admin.template-food-items.create');
+    Route::post('/template-food-items', [AdminTemplateFoodItemController::class, 'store'])
+        ->name('admin.template-food-items.store');
+    Route::get('/template-food-items/{templateFoodItem}/edit', [AdminTemplateFoodItemController::class, 'edit'])
+        ->name('admin.template-food-items.edit');
+    Route::put('/template-food-items/{templateFoodItem}', [AdminTemplateFoodItemController::class, 'update'])
+        ->name('admin.template-food-items.update');
+    Route::delete('/template-food-items/{templateFoodItem}', [AdminTemplateFoodItemController::class, 'destroy'])
+        ->name('admin.template-food-items.destroy');
+});
+
+//Manage WorkoutTemplates on admin side
+Route::prefix('admin')->name('admin.workout-templates.')->group(function () {
+    Route::get('/workout-templates', [AdminWorkoutTemplateController::class, 'index'])->name('index');
+    Route::get('/workout-templates/create', [AdminWorkoutTemplateController::class, 'create'])->name('create');
+    Route::post('/workout-templates', [AdminWorkoutTemplateController::class, 'store'])->name('store');
+    Route::get('/workout-templates/{workoutTemplate}/edit', [AdminWorkoutTemplateController::class, 'edit'])->name('edit');
+    Route::put('/workout-templates/{workoutTemplate}', [AdminWorkoutTemplateController::class, 'update'])->name('update');
+    Route::delete('/workout-templates/{workoutTemplate}', [AdminWorkoutTemplateController::class, 'destroy'])->name('destroy');
+});
+
+// Manage Exercise on admin side
+Route::get('/admin/exercises', [AdminExerciseController::class, 'index'])->name('admin.exercises.index');
+Route::get('/exercises/create', [AdminExerciseController::class, 'create'])->name('admin.exercises.create');
+Route::post('/exercises', [AdminExerciseController::class, 'store'])->name('admin.exercises.store');
+Route::get('/exercises/{exercise}/edit', [AdminExerciseController::class, 'edit'])->name('admin.exercises.edit');
+Route::put('/exercises/{exercise}', [AdminExerciseController::class, 'update'])->name('admin.exercises.update');
+Route::delete('/exercises/{exercise}', [AdminExerciseController::class, 'destroy'])->name('admin.exercises.destroy');
+
+//User Preferences Management for lookup tables 
+Route::get('/admin/configurations', [ConfigurationController::class, 'index'])->name('admin.preferences');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Activity Levels

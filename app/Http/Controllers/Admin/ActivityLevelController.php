@@ -16,7 +16,7 @@ class ActivityLevelController extends Controller
     {
         $user = Auth::user();
         $activityLevels = ActivityLevel::all();
-        return view('admin.preferences.activity_levels_index', compact('activityLevels', 'user'));
+        return view('admin.configurations.activity_levels_index', compact('activityLevels', 'user'));
     }
 
     public function store(Request $request)

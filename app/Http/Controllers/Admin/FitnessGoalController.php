@@ -16,7 +16,7 @@ class FitnessGoalController extends Controller
     {
         $user = Auth::user();
         $fitnessGoals = FitnessGoal::all();
-        return view('admin.preferences.fitness_goals_index', compact('fitnessGoals', 'user'));
+        return view('admin.configurations.fitness_goals_index', compact('fitnessGoals', 'user'));
     }
 
     public function store(Request $request)

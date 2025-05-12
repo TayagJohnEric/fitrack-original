@@ -17,7 +17,7 @@ class WorkoutTypeController extends Controller
     {
         $user = Auth::user();
         $workoutTypes = WorkoutType::all();
-        return view('admin.preferences.workout_types_index', compact('workoutTypes', 'user'));
+        return view('admin.configurations.workout_types_index', compact('workoutTypes', 'user'));
     }
 
     public function store(Request $request)

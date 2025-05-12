@@ -19,7 +19,7 @@
         <div class="flex items-center space-x-4">
           
             <!-- Profile Component -->
-            @include('components.profile')
+            @include('components.user.profile')
         </div>
     </div>
 </header>
