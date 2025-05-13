@@ -46,4 +46,17 @@ class DashboardController extends Controller
                 ->with('error', 'There was an error loading your dashboard. Please try again.');
         }
     }
+
+
+    public function profileSettings(){
+
+        $user = Auth::user();
+        $profile = $user->profile;
+
+        if (!$profile) {
+            return redirect()->route('profile.setup.basics')->with('error', 'Please complete your profile setup first.');
+        }
+
+        return view('user.profile.profile_settings', compact('user', 'profile'));
+    }
 }

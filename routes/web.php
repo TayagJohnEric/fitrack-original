@@ -21,8 +21,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LogMealController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\FoodSuggestionController;
-
-
+use App\Http\Controllers\WorkoutController;
+use App\Http\Controllers\ProgressController;
+use App\Models\FoodSuggestionCategory;
 
 //LandingPage
 Route::get('/', function () {
@@ -195,6 +196,11 @@ Route::middleware(['auth'])->group(function () {
 //User route
 //User Log Meal for user side
 Route::get('/log-meal', [LogMealController::class, 'logMeal'])->name('log-meal')->middleware(['auth']);
+Route::get('/workouts', [WorkoutController::class, 'workout'])->name('workout')->middleware(['auth']);
+Route::get('/progress', [ProgressController::class, 'progress'])->name('progress')->middleware(['auth']);
+Route::get('/food-suggestions', [FoodSuggestionController::class, 'foodSuggestion'])->name('food-suggestion')->middleware(['auth']);
+Route::get('/profile-settings', [DashboardController::class, 'profileSettings'])->name('profile-settings')->middleware(['auth']);
+
 
 
 // Food Suggestion Favorites Routes

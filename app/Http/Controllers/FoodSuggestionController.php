@@ -8,6 +8,15 @@ use App\Models\UserFavoriteSuggestion;
 
 class FoodSuggestionController extends Controller
 {
+
+
+    public function foodSuggestion(){
+        $user = Auth::user();
+        return view('user.food-suggestions.food_suggestion', compact('user'));
+     }
+
+
+
     /**
      * Save a food suggestion template as a user favorite
      *
