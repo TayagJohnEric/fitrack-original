@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\AdminTemplateFoodItemController;
 use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LogMealController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\FoodSuggestionController;
 
@@ -191,8 +192,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
 //User route
+//User Log Meal for user side
+Route::get('/log-meal', [LogMealController::class, 'logMeal'])->name('log-meal')->middleware(['auth']);
+
 
 // Food Suggestion Favorites Routes
 Route::middleware(['auth'])->group(function () {
