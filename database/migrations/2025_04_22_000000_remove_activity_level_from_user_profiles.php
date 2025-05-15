@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_levels', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->timestamps();
+        Schema::table('user_profiles', function (Blueprint $table) {
+            $table->dropForeign(['activity_level_id']);
+            $table->dropColumn('activity_level_id');
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activity_levels');
+        Schema::table('user_profiles', function (Blueprint $table) {
+            $table->foreignId('activity_level_id')->nullable()->constrained();
+        });
     }
-};
+}; 

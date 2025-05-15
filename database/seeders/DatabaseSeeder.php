@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            ActivityLevelSeeder::class,
             FitnessGoalSeeder::class,
             ExperienceLevelSeeder::class,
             WorkoutTypeSeeder::class,

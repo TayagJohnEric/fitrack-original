@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ActivityLevel;
 use App\Models\Allergy;
 use App\Models\ExperienceLevel;
 use App\Models\FitnessGoal;
@@ -102,7 +101,6 @@ class ProfileSetupController extends Controller
         }
 
         try {
-            $activityLevels = ActivityLevel::all();
             $fitnessGoals = FitnessGoal::all();
             $experienceLevels = ExperienceLevel::all();
             $workoutTypes = WorkoutType::all();
@@ -111,7 +109,6 @@ class ProfileSetupController extends Controller
 
             return view('profile.setup_preferences', compact(
                 'profile',
-                'activityLevels',
                 'fitnessGoals',
                 'experienceLevels',
                 'workoutTypes',
@@ -127,7 +124,6 @@ class ProfileSetupController extends Controller
     public function storePreferences(Request $request)
     {
         $validated = $request->validate([
-            'activity_level_id' => 'required|exists:activity_levels,id',
             'fitness_goal_id' => 'required|exists:fitness_goals,id',
             'experience_level_id' => 'required|exists:experience_levels,id',
             'workout_type_id' => 'required|exists:workout_types,id',
@@ -145,7 +141,6 @@ class ProfileSetupController extends Controller
         try {
             // Update profile preferences
             $profile->update([
-                'activity_level_id' => $validated['activity_level_id'],
                 'fitness_goal_id' => $validated['fitness_goal_id'],
                 'experience_level_id' => $validated['experience_level_id'],
                 'workout_type_id' => $validated['workout_type_id'],

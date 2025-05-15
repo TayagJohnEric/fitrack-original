@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
-use App\Models\ActivityLevel;
 use App\Models\FitnessGoal;
 use App\Models\ExperienceLevel;
 use App\Models\WorkoutType;
-
 
 class UserProfile extends Model
 {
@@ -25,7 +23,6 @@ class UserProfile extends Model
         'sex',
         'height_cm',
         'current_weight_kg',
-        'activity_level_id',
         'fitness_goal_id',
         'experience_level_id',
         'workout_type_id',
@@ -41,11 +38,6 @@ class UserProfile extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function activityLevel()
-    {
-        return $this->belongsTo(ActivityLevel::class);
     }
 
     public function fitnessGoal()

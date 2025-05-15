@@ -107,11 +107,6 @@ Route::delete('/exercises/{exercise}', [AdminExerciseController::class, 'destroy
 Route::get('/admin/configurations', [ConfigurationController::class, 'index'])->name('admin.preferences');
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Activity Levels
-    Route::get('/activity-levels', [ActivityLevelController::class, 'index'])->name('activity-levels.index');
-    Route::post('/activity-levels', [ActivityLevelController::class, 'store'])->name('activity-levels.store');
-    Route::delete('/activity-levels/{activityLevel}', [ActivityLevelController::class, 'destroy'])->name('activity-levels.destroy');
-
     // Fitness Goals
     Route::get('/fitness-goals', [FitnessGoalController::class, 'index'])->name('fitness-goals.index');
     Route::post('/fitness-goals', [FitnessGoalController::class, 'store'])->name('fitness-goals.store');

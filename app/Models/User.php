@@ -115,24 +115,8 @@ class User extends Authenticatable
             $bmr = 10 * $weight + 6.25 * $height - 5 * $age - 161;
         }
         
-        // Activity multiplier
-        $activityMultiplier = 1.2; // Default to sedentary
-        
-        if ($profile->activityLevel) {
-            $activityName = strtolower($profile->activityLevel->name);
-            
-            if (strpos($activityName, 'sedentary') !== false) {
-                $activityMultiplier = 1.2;
-            } elseif (strpos($activityName, 'light') !== false) {
-                $activityMultiplier = 1.375;
-            } elseif (strpos($activityName, 'moderate') !== false) {
-                $activityMultiplier = 1.55;
-            } elseif (strpos($activityName, 'active') !== false || strpos($activityName, 'high') !== false) {
-                $activityMultiplier = 1.725;
-            } elseif (strpos($activityName, 'very') !== false || strpos($activityName, 'extreme') !== false) {
-                $activityMultiplier = 1.9;
-            }
-        }
+        // Use a fixed moderate activity multiplier (1.55)
+        $activityMultiplier = 1.55;
         
         // TDEE (Total Daily Energy Expenditure)
         return $bmr * $activityMultiplier;

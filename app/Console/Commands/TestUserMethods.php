@@ -69,7 +69,6 @@ class TestUserMethods extends Command
                     ['Sex', $user->profile->sex ?? 'Not set'],
                     ['Height (cm)', $user->profile->height_cm ?? 'Not set'],
                     ['Weight (kg)', $user->profile->current_weight_kg ?? 'Not set'],
-                    ['Activity Level', $user->profile->activityLevel->name ?? 'Not set'],
                 ]
             );
         } else {

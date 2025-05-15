@@ -29,14 +29,14 @@
                     <div class="mb-4">
                         <h1 class="text-xl md:text-2xl font-bold text-gray-800">Profile Setup - Lifestyle & Preferences</h1>
                         <p class="text-sm md:text-base text-gray-500">Tell us more about your daily habits and what matters most to you.</p>
-                      </div>
-                                          <div class="flex items-center space-x-3">
+                    </div>
+                    <div class="flex items-center space-x-3">
                         <div class="flex space-x-1">
                             <div class="h-2 w-2 rounded-full bg-gray-300 opacity-50"></div>
                             <div class="h-2 w-2 rounded-full bg-gray-300 opacity-50"></div>
                             <div class="h-2 w-2 rounded-full bg-gray-600"></div>
                         </div>
-                        <span class="text-sm font-medium text-white bg-gray-800  px-3 py-1 rounded-full">Step 3 of 3</span>
+                        <span class="text-sm font-medium text-white bg-gray-800 px-3 py-1 rounded-full">Step 3 of 3</span>
                     </div>
                 </div>
             </div>
@@ -46,106 +46,80 @@
                 <form method="POST" action="{{ route('profile.setup.preferences.store') }}" class="space-y-10">
                     @csrf
                     
-                <!-- Activity Level -->
-<div x-data="{ selected: '{{ old('activity_level_id', $profile->activity_level_id ?? '') }}' }" class="space-y-4">
-    <label id="activity-level-label" class="block text-gray-800 font-semibold mb-3">Activity Level</label>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        @foreach($activityLevels as $level)
-        <div>
-            <input type="radio" name="activity_level_id" id="activity_{{ $level->id }}" value="{{ $level->id }}" 
-                x-model="selected"
-                class="peer sr-only" required>
-            <label for="activity_{{ $level->id }}" 
-                class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 border-gray-200 rounded-full cursor-pointer transition-all duration-200 
-                peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
-                  hover:border-gray-800"
-                :class="selected == '{{ $level->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
-                >
-                {{ $level->name }}
-            </label>
-        </div>
-        @endforeach
-    </div>
-    @error('activity_level_id')
-    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
+                    <!-- Primary Fitness Goal -->
+                    <div x-data="{ selected: '{{ old('fitness_goal_id', $profile->fitness_goal_id ?? '') }}' }" class="space-y-4">
+                        <label id="fitness-goal-label" class="block text-gray-800 font-semibold mb-3">Primary Fitness Goal</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            @foreach($fitnessGoals as $goal)
+                            <div>
+                                <input type="radio" name="fitness_goal_id" id="goal_{{ $goal->id }}" value="{{ $goal->id }}" 
+                                    x-model="selected"
+                                    class="peer sr-only" required>
+                                <label for="goal_{{ $goal->id }}" 
+                                    class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 rounded-full cursor-pointer transition-all duration-200 
+                                    peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
+                                     hover:border-gray-800 border-gray-200"
+                                    :class="selected == '{{ $goal->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
+                                    >
+                                    {{ $goal->name }}
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
+                        @error('fitness_goal_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                     
-                 <!-- Primary Fitness Goal -->
-<div x-data="{ selected: '{{ old('fitness_goal_id', $profile->fitness_goal_id ?? '') }}' }" class="space-y-4">
-    <label id="fitness-goal-label" class="block text-gray-800 font-semibold mb-3">Primary Fitness Goal</label>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        @foreach($fitnessGoals as $goal)
-        <div>
-            <input type="radio" name="fitness_goal_id" id="goal_{{ $goal->id }}" value="{{ $goal->id }}" 
-                x-model="selected"
-                class="peer sr-only" required>
-            <label for="goal_{{ $goal->id }}" 
-                class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 rounded-full cursor-pointer transition-all duration-200 
-                peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
-                 hover:border-gray-800 border-gray-200"
-                :class="selected == '{{ $goal->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
-                >
-                {{ $goal->name }}
-            </label>
-        </div>
-        @endforeach
-    </div>
-    @error('fitness_goal_id')
-    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
-                    
-<!-- Experience Level -->
-<div x-data="{ selected: '{{ old('experience_level_id', $profile->experience_level_id ?? '') }}' }" class="space-y-4">
-    <label id="experience-level-label" class="block text-gray-800 font-semibold mb-3">Experience Level</label>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        @foreach($experienceLevels as $level)
-        <div>
-            <input type="radio" name="experience_level_id" id="experience_{{ $level->id }}" value="{{ $level->id }}" 
-                x-model="selected"
-                class="peer sr-only" required>
-            <label for="experience_{{ $level->id }}" 
-                class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 rounded-full cursor-pointer transition-all duration-200 
-                peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
-               hover:border-gray-800 border-gray-200"
-                :class="selected == '{{ $level->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
-                >
-                {{ $level->name }}
-            </label>
-        </div>
-        @endforeach
-    </div>
-    @error('experience_level_id')
-    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
+                    <!-- Experience Level -->
+                    <div x-data="{ selected: '{{ old('experience_level_id', $profile->experience_level_id ?? '') }}' }" class="space-y-4">
+                        <label id="experience-level-label" class="block text-gray-800 font-semibold mb-3">Experience Level</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            @foreach($experienceLevels as $level)
+                            <div>
+                                <input type="radio" name="experience_level_id" id="experience_{{ $level->id }}" value="{{ $level->id }}" 
+                                    x-model="selected"
+                                    class="peer sr-only" required>
+                                <label for="experience_{{ $level->id }}" 
+                                    class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 rounded-full cursor-pointer transition-all duration-200 
+                                    peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
+                                   hover:border-gray-800 border-gray-200"
+                                    :class="selected == '{{ $level->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
+                                    >
+                                    {{ $level->name }}
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
+                        @error('experience_level_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                    
-                   <!-- Preferred Workout Type -->
-<div x-data="{ selected: '{{ old('workout_type_id', $profile->workout_type_id ?? '') }}' }" class="space-y-4">
-    <label id="workout-type-label" class="block text-gray-800 font-semibold mb-3">Preferred Workout Type</label>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        @foreach($workoutTypes as $type)
-        <div>
-            <input type="radio" name="workout_type_id" id="workout_{{ $type->id }}" value="{{ $type->id }}" 
-                x-model="selected"
-                class="peer sr-only" required>
-            <label for="workout_{{ $type->id }}" 
-                class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 rounded-full cursor-pointer transition-all duration-200 
-                peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
-                 hover:border-gray-800 border-gray-200"
-                :class="selected == '{{ $type->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
-                >
-                {{ $type->name }}
-            </label>
-        </div>
-        @endforeach
-    </div>
-    @error('workout_type_id')
-    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
+                    <!-- Preferred Workout Type -->
+                    <div x-data="{ selected: '{{ old('workout_type_id', $profile->workout_type_id ?? '') }}' }" class="space-y-4">
+                        <label id="workout-type-label" class="block text-gray-800 font-semibold mb-3">Preferred Workout Type</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            @foreach($workoutTypes as $type)
+                            <div>
+                                <input type="radio" name="workout_type_id" id="workout_{{ $type->id }}" value="{{ $type->id }}" 
+                                    x-model="selected"
+                                    class="peer sr-only" required>
+                                <label for="workout_{{ $type->id }}" 
+                                    class="flex justify-center items-center font-medium text-sm px-4 py-3 text-center border-2 rounded-full cursor-pointer transition-all duration-200 
+                                    peer-checked:border-gray-800 peer-checked:bg-gray-800 peer-checked:text-white 
+                                     hover:border-gray-800 border-gray-200"
+                                    :class="selected == '{{ $type->id }}' ? 'border-gray-800 bg-gray-800 text-white' : ''"
+                                    >
+                                    {{ $type->name }}
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
+                        @error('workout_type_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                     
                     <!-- Known Allergies -->
                     <div class="space-y-4">

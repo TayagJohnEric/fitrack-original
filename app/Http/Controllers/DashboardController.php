@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\ActivityLevel;
 use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
@@ -31,8 +30,7 @@ class DashboardController extends Controller
             }
             
             // Check if preferences are missing
-            if (!$profile->activity_level_id || !$profile->fitness_goal_id || 
-                !$profile->experience_level_id || !$profile->workout_type_id) {
+            if (!$profile->fitness_goal_id || !$profile->experience_level_id || !$profile->workout_type_id) {
                 return redirect()->route('profile.setup.preferences')
                     ->with('error', 'Please complete your fitness preferences.');
             }
@@ -42,8 +40,7 @@ class DashboardController extends Controller
             return view('user.dashboard', compact('user', 'profile', 'dailyCalories', 'currentBmi'));
         } catch (\Exception $e) {
             Log::error('Dashboard error: ' . $e->getMessage());
-            return redirect()->route('profile.setup.basics')
-                ->with('error', 'There was an error loading your dashboard. Please try again.');
+            return back()->with('error', 'An error occurred while loading the dashboard.');
         }
     }
 
