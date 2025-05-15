@@ -33,6 +33,7 @@ class TemplateFoodItemSeeder extends Seeder
         $plantProteinLunchId = FoodSuggestionTemplate::where('name', 'Plant Protein Lunch')->first()->id;
         $quickBreakfastId = FoodSuggestionTemplate::where('name', '5-Minute Breakfast')->first()->id;
         $lowCarbDinnerId = FoodSuggestionTemplate::where('name', 'Low-Carb Dinner')->first()->id;
+        $noCookLunchId = FoodSuggestionTemplate::where('name', 'No-Cook Lunch')->first()->id;
 
         // Get food IDs
         $eggs = FoodItem::where('name', 'Eggs')->first()->id;
@@ -545,6 +546,34 @@ class TemplateFoodItemSeeder extends Seeder
             [
                 'template_id' => $lowCarbDinnerId,
                 'food_id' => $oliveoil,
+                'suggested_quantity' => 1.0,
+                'is_required' => false,
+                'alternatives_group_id' => null,
+            ],
+            [
+                'template_id' => $noCookLunchId,
+                'food_id' => $wholeWheatBread, // Used as wrap
+                'suggested_quantity' => 1.0,
+                'is_required' => true,
+                'alternatives_group_id' => 24,
+            ],
+            [
+                'template_id' => $noCookLunchId,
+                'food_id' => $spinach,
+                'suggested_quantity' => 1.0, // cup
+                'is_required' => false,
+                'alternatives_group_id' => null,
+            ],
+            [
+                'template_id' => $noCookLunchId,
+                'food_id' => $greekYogurt,
+                'suggested_quantity' => 1.0, // cup
+                'is_required' => false,
+                'alternatives_group_id' => null,
+            ],
+            [
+                'template_id' => $noCookLunchId,
+                'food_id' => $apple,
                 'suggested_quantity' => 1.0,
                 'is_required' => false,
                 'alternatives_group_id' => null,
