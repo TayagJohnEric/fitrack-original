@@ -65,24 +65,29 @@
 
 
     <!-- Hero Section -->
-    <section class="relative h-screen flex items-center bg-gray-900 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-black opacity-90"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center z-10">
-            <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 opacity-0">Transform Your Fitness Journey</h1>
-            <p id="hero-subtitle" class="text-xl md:text-2xl max-w-3xl mb-10 opacity-0">The comprehensive web-based solution for personalized workout plans and real-time nutrition tracking.</p>
-            <div id="hero-buttons" class="flex flex-col sm:flex-row gap-4 opacity-0">
-                <a href="{{route('login')}}" class="px-8 py-3 bg-white text-gray-900 font-semibold rounded-3xl hover:bg-gray-200 transition">Get Started</a>
-                <a href="#learn-more" class="px-8 py-3 bg-transparent border-2 border-white text-white rounded-3xl hover:bg-white hover:text-gray-900 transition">Learn More</a>
-            </div>
+<section class="relative h-screen flex items-center bg-cover bg-center overflow-hidden" style="background-image: url('{{ asset('images/hero-bg.jpg') }}');">
+    <!-- Black Transparent Overlay -->
+    <div class="absolute inset-0 bg-black opacity-70"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center z-10">
+        <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 opacity-0 text-white">Transform Your Fitness Journey</h1>
+        <p id="hero-subtitle" class="text-xl md:text-2xl max-w-3xl mb-10 opacity-0 text-white">The comprehensive web-based solution for personalized workout plans and real-time nutrition tracking.</p>
+        <div id="hero-buttons" class="flex flex-col sm:flex-row gap-4 opacity-0">
+            <a href="{{route('login')}}" class="px-8 py-3 bg-white text-gray-900 font-semibold rounded-3xl hover:bg-gray-200 transition">Get Started</a>
+            <a href="#learn-more" class="px-8 py-3 bg-transparent border-2 border-white text-white rounded-3xl hover:bg-white hover:text-gray-900 transition">Learn More</a>
         </div>
-        <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
-            <a href="#features" class="text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-            </a>
-        </div>
-    </section>
+    </div>
+
+    <!-- Down Arrow Icon -->
+    <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce z-10">
+        <a href="#features" class="text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </a>
+    </div>
+</section>
+
 
   <!-- Enhanced Features Section -->
 <section id="features" class="py-16 bg-gradient-to-b from-gray-50 to-white">
